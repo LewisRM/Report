@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hreport.core.report.mapper.DataSourceMapper">
+
+	<resultMap type="hreport.core.report.dto.DataSource" id="dataSourceMap">
+		<id property="dataSourceId" column="datasource_id" />
+		<result property="jdbcUrl" column="jdbc_url" />
+		<result property="name" column="name" />
+		<result property="username" column="username" />
+		<result property="password" column="password" />
+	</resultMap>
+
+	<select id="findAll" resultMap="dataSourceMap">
+		select * from rep_datasource 
+	</select>
+</mapper>

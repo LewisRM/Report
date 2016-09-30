@@ -1,0 +1,88 @@
+<#--
+ * description: DEMO
+ * version: 1.0
+ * #copyright#
+ *
+-->
+<#include "../include/head.html">
+<body style="padding: 10px;">
+<form id="demoForm"></form>
+<div id="demoGrid" style="margin: 0; padding: 0"></div>
+<script type="text/javascript">
+    $(function () {
+        window['demoForm'] = $("#demoForm").ligerForm({
+            fields : [{
+                type : 'text',
+                label: '<@spring.message "demo.name"/>',
+                name : 'name'
+            }],
+            buttons: [{
+                text    : '<@spring.message "hap.query"/>',
+                disabled: false,
+                width   : 60,
+                click   : function () {
+                    Hap.gridQuery({
+                        form: demoForm,
+                        grid: demoGrid
+                    })
+                }
+            }]
+        });
+
+        window['demoGrid'] = $("#demoGrid").ligerGrid({
+            unSetValidateAttr: false,
+            columns          : [{
+                display: '<@spring.message "demo.name"/>',
+                name   : 'name',
+                align  : 'left',
+                width  : 120,
+                editor : {
+                    type: 'text'
+                },
+	            validate:{
+		            required:true
+	            }
+            }],
+            url              : '${base.contextPath}/demo/query',
+            toolbar          : {
+                items: [{
+                    text   : '<@spring.message "hap.new"/>',
+                    disable: false,
+                    click  : function () {
+                        demoGrid.addRow({})
+                    },
+                    icon   : 'add'
+                }, {
+                    line: true
+                }, {
+                    text : '<@spring.message "hap.delete"/>',
+                    click: function () {
+                        Hap.gridDelete({
+                            grid: demoGrid,
+                            url : '${base.contextPath}/demo/delete'
+                        })
+
+                    },
+                    icon : 'delete'
+                }, {
+                    line: true
+                }, {
+                    text : '<@spring.message "hap.save"/>',
+                    click: function () {
+                        Hap.gridSave({
+                            grid: demoGrid,
+                            url : '${base.contextPath}/demo/submit'
+                        })
+                    },
+                    icon : 'save'
+                }]
+            },
+            enabledEdit      : true,
+            width            : '99%',
+            height           : '98%',
+            checkbox         : true
+        });
+    });
+</script>
+</body>
+</html>

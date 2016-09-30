@@ -1,0 +1,67 @@
+
+
+
+<#include "../include/header.html">
+<script src="${base.contextPath}/resources/js/report/reportList.js"></script>
+<script src="${base.contextPath}/resources/js/report/params.js"></script>
+
+<script src="${base.contextPath}/resources/js/report/jszip.min.js"></script>
+<link href="${base.contextPath}/resources/css/report/lov.css" rel="stylesheet" type="text/css" />
+<link href="${base.contextPath}/resources/css/report/report.css" rel="stylesheet" type="text/css" />
+
+<body style="background-color:white">
+	<div id="page-content">
+		<br/>
+	    <!-- 渲染报表 -->
+	    <div id="formElementsWin">
+		    
+	    </div>
+	    
+	    <!-- lov弹出框 -->
+	    <div id="lovWin">
+		    
+	    </div>
+    </div>
+
+
+    <script type="text/javascript">
+	    $(document).ready(function() {
+	    	
+	    	
+	    	notEmpty='<@spring.message "hreport.rep.notempty"/>';
+	    	query='<@spring.message "hap.query"/>';
+	    	confirm='<@spring.message "hap.confirm"/>';
+	    	informationNotEnough='<@spring.message "hreport.lov.validatetable.notenough"/>';
+	    	
+	    	<!--渲染Lov弹出框-->
+            $("#lovWin").kendoWindow({
+            	width: "700px",
+            	height:"300px",
+            	modal: true,
+                title: "LOV",
+                actions: [
+                    "Pin",
+                    "Minimize",
+                    "Maximize",
+                    "Close"
+                ],
+                visible: false
+            });
+	    })
+	    
+	    
+	    
+	    
+	</script>
+	<script src="${base.contextPath}/resources/js/report/report.js"></script>
+
+
+
+
+
+
+
+
+
+</body>
+</html>

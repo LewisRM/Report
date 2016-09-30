@@ -1,0 +1,712 @@
+<#--
+ * description: 数据源
+ * version: 1.0 
+ * author:qiuzheng.wang@hand-china.com
+ *  
+ * 
+-->
+<#include "../include/header.html">
+
+<body>
+	<div id="content-container">
+        <div id="page-content">
+	        <div class="panel">
+	            <form class="form-horizontal">
+	                <div class="panel-body">
+	                    	<div class="col-sm-6">
+	                            <div class="form-group">
+	                                <label class="col-sm-3 control-label"><@spring.message "hreport.lov.flexvset.flexvaluesetname"/></label>
+	                                <div class="col-sm-9">
+	                                    <input type="text" style="width:100%" data-bind="value:model.flexValueSetName" class="k-textbox">
+	                                </div>
+	                            </div>
+	                        </div>
+	                        <div class="col-sm-6">
+	                            <div class="form-group">
+	                                <label class="col-sm-3 control-label"><@spring.message "hreport.lov.flexvset.description"/></label>
+	                                <div class="col-sm-9">
+	                                    <input type="text" style="width:100%" data-bind="value:model.description" class="k-textbox">
+	                                </div>
+	                            </div>
+	                        </div>
+	                </div>
+	                <div class="panel-footer text-right">
+	                    <span class="btn btn-success" data-bind="click:queryResource" type="submit"><@spring.message "hap.query"/></span>
+	                </div>
+	            </form>
+	        </div>         
+            <div id="flexVsetList" style="clear:both"></div>
+        </div>
+        <div id="page-content2">       
+            <div id="lovWin" style="clear:both">
+            
+                  	<div id="showWin" >
+            	
+	            	<div class="row">
+	            		<label class="col-md-2 col-sm-3 col-md-offset-1" style="font-size:14px;text-align: right;margin-right:0px;"><strong><@spring.message "hreport.lov.flexvset.flexvaluesetname"/>:</strong></label>
+	            		<div class="col-md-6 col-sm-8" style="padding-left:0px; margin-bottom:5px;" >
+	            			<input type="text" id="vsetName" class="k-textbox" style="width:100%;height:23px">
+	            		</div>
+	            	</div>
+	            	<div class="row">
+	            		<label class="col-md-2 col-sm-3 col-md-offset-1" style="font-size:14px;text-align: right;margin-right:0px;"><strong><@spring.message "hreport.lov.flexvset.description"/>:</strong></label>
+	            		<div class="col-md-6 col-sm-8" style="padding-left:0px; margin-bottom:5px;">
+	            			<input type="text" id="vsetDescription" class="k-textbox" style="width:100%;height:23px">
+	            		</div>
+	            	</div>	            	
+	            	<div class="row">
+	            		<label class="col-md-2 col-sm-3 col-md-offset-1" style="font-size:14px;text-align: right;margin-right:0px;"><strong><@spring.message "hreport.lov.flexvset.tablename"/>:</strong></label>
+	            		<div class="col-md-6 col-sm-8" style="padding-left:0px; margin-bottom:5px;">
+	            			<input type="text" id="vsetTableName" class="k-textbox" style="width:100%;height:23px">
+	            		</div>
+	            	</div>
+	            	<div class="row">	         		
+	            		<label class="col-md-2 col-sm-3 col-md-offset-1" style="font-size:14px;text-align: right;margin-right:0px;"><strong><@spring.message "hreport.lov.flexvset.wherecondition"/>:</strong></label>
+	            		<div class="col-md-6 col-sm-6" style="padding-left:0px; margin-bottom:5px;">
+	            			<textarea class="k-textbox" id="vsetWhereCondition" style="width:100%;height:80px"></textarea>
+	            		</div>
+	            	</div>
+	            	<div class="row">
+	            		<label class="col-md-2 col-sm-3 col-md-offset-1" style="font-size:14px;text-align: right;margin-right:0px;"><strong><@spring.message "hreport.lov.flexvset.expandmethod"/>:</strong></label>
+	        			<div class="col-md-6 col-sm-6" style="padding-left:0px; margin-bottom:8px;">
+	        			<textarea class="k-textbox" id="vsetExtentMethod" style="width:100%;height:80px"></textarea>
+	        			</div>
+	            	</div>
+	            	
+	                <div class="row">
+	                	<div class="col-md-3 col-md-offset-2" style="padding-right:0px;">
+	                	<strong><@spring.message "hreport.lov.flexvset.title"/>:</strong>&nbsp;<input type="text" id="vsetTitle" class="k-textbox" style="width:80%;height:23px">
+	                	</div>
+	                	
+	                	<div class="col-md-3" style="padding-right:0px;padding-left:0px;">
+	                	<strong><@spring.message "hreport.lov.flexvset.width"/>:</strong>&nbsp;<input type="text" id="vsetWidth" class="k-textbox" style="width:48px;height:23px;margin-right:20px;">
+	                	<strong><@spring.message "hreport.lov.flexvset.height"/>:</strong>&nbsp;<input type="text" id="vsetHeight" class="k-textbox" style="width:48px;height:23px">
+	                	</div>
+	                	<div class="col-md-2" style="padding-right:0px;padding-left:0px;">
+	                	<strong><@spring.message "hreport.lov.flexvset.delayedloadingflag"/>:</strong>&nbsp;<input id="vsetLazyLoad" type="checkbox"/>
+	                	</div>
+	                </div>
+	                
+	                <br/>	                
+	                <div class="row">
+	                	<div class="col-md-offset-6 col-md-3" style="padding-right:0px;margin-bottom:20px;padding-left:30px">
+	                		<button type="button" class="btn btn-info" onclick="saveVsetInfo();" style="float:right;"><@spring.message "hap.save"/></button>
+	                	</div>
+	                </div>
+	             </div>
+ 
+            	
+            	 <div id="validateTableList" style="clear:both"></div>
+            </div>
+        </div>
+	</div>
+<script type="text/javascript">
+
+$(document).ready(function () {
+	//初始化多语言数据
+	updateSuccess='<@spring.message "hreport.rep.updateSuccess"/>';
+	selectOne='<@spring.message "hreport.rep.selectOne"/>';
+	save='<@spring.message "hap.save"/>';
+	setLines='<@spring.message "hreport.lov.flexvset.setlines"/>';
+	notOnlyOne='<@spring.message "hreport.lov.validatetable.notonlyone"/>';
+	valuefield='<@spring.message "hreport.lov.validatetable.valuefield"/>';
+	textfield='<@spring.message "hreport.lov.validatetable.textfield"/>';
+	error='<@spring.message "hap.error"/>';
+	
+	
+	//查询条件绑定数据
+    var viewModel = kendo.observable({
+        model:{},
+        queryResource: function(e) {
+            $('#flexVsetList').data('kendoGrid').dataSource.read();
+        }
+    });
+    kendo.bind($('#page-content'),viewModel)
+	
+    //初始化下拉数据
+	yesOrNo=[];
+	$.ajax({
+		type: "post",
+		async: false,
+		url:"/core/rep/compenentContent/getCodeValuesByCode",
+		data:{
+			"code":"SYS.YES_NO"
+		},
+		success:function(data){
+			yesOrNo=data;
+		},
+		errors:function(){
+			alert(error)					
+		}
+	});
+	
+    //lov所在字下拉选项
+	var columnFlags=[];
+	$.ajax({
+		type: "post",
+		async: false,
+		url:"/core/rep/compenentContent/getCodeValuesByCode",
+		data:{
+			"code":"REP.LOV_COLUMNFLAG"
+		},
+		success:function(data){
+			columnFlags=data;
+		},
+		errors:function(){
+			alert(error)					
+		}
+	});
+	
+	$("#lovWin").kendoWindow({
+    	width: "900px",
+    	height:"700px",
+        modal: true,
+        title: "Params",
+        actions: [
+            "Pin",
+            "Minimize",
+            "Maximize",
+            "Close"
+        ],
+        visible: false
+    });
+	
+	    
+        var BaseUrl = "${base.contextPath}/rep/flexVset/",
+            dataSource = new kendo.data.DataSource({
+                transport: {
+                    read:  {
+                        url: BaseUrl + "query",
+                        type : "POST",
+                        dataType: "json"
+                    },
+                    update: {
+                        url: BaseUrl + "submit",
+                        type : "POST" ,
+                        contentType: "application/json"
+                    },
+                    destroy: {
+                        url: BaseUrl + "delete",
+                        type : "POST" ,
+                        contentType: "application/json"
+                    },
+                    create: {
+                        url: BaseUrl + "submit",
+                        type : "POST" ,
+                        contentType: "application/json"
+                    },
+                    parameterMap: function(options, type) {
+                        if (type !== "read" && options.models) {
+                            var datas = options.models
+                            if(type =='create' || type =='update'){
+                                datas = options.models.map(function(data){
+                                    data['__status'] = (type =='create' ? 'add' : 'update');
+                                    return data;
+                                })
+                            }
+                            return kendo.stringify(datas);
+                        } else if (type === "read") {
+                        	var model = viewModel.model;
+                            var map = {flexValueSetName: model.flexValueSetName,description: model.description}
+                            //var map = {};
+                            if (options.page) 
+                                map.page = options.page; 
+                            if (options.pageSize) 
+                                map.pagesize = options.pageSize;
+                            for(var k in map){
+                            	if(map[k]==='')delete map[k]
+                            }
+                            return map;
+                        }  
+                    }
+                },
+                batch: true,
+                serverPaging : true,
+                pageSize: 10,
+                schema: {
+                    data:'rows',
+                    total:'total',
+                    model: {
+                    	id: "flexValueSetId",
+                        fields: {
+                        	flexValueSetName: { editable: true, validation: { required: true } },
+                        	description: { editable: true,validation: { required: true } },
+                        	enabledFlag: { editable: true,validation: { required: false } }
+                        }
+                    },
+                    errors: function(res){
+                        if(!res.success && res.message) {
+                            return res.message;
+                        }
+                    }
+                },
+                error: function(e) {
+                    alert(e.errors)
+                }
+            });
+
+        $("#flexVsetList").kendoGrid({
+        	dataSource: dataSource,
+            resizable: true,
+            selectable: "single",
+            scrollable: false,
+            pageable: {
+                pageSizes:[5, 10, 20, 50],
+                refresh:true,
+                buttonCount:5,
+                messages: {
+                    noRecords: "未找到任何数据",
+                    display: "{0} - {1} 共 {2} 条数据",
+                    empty: "没有数据",
+                    page: "页",
+                    of: "/ {0}",
+                    itemsPerPage: "条每页",
+                    first: "第一页",
+                    previous: "前一页",
+                    next: "下一页",
+                    last: "最后一页",
+                    refresh: "刷新"
+                }
+            },
+            toolbar: [{ 
+                name:"create", 
+                text:'<@spring.message "hap.new"/>'
+            },{
+                name:"save",
+                text:'<@spring.message "hap.save"/>'
+            },{
+                name:"cancel",
+                text:'<@spring.message "hap.cancel"/>'
+       		},{
+                name:"test",
+                text:setLines
+       		}],
+            columns: [
+                { 
+                	field: "flexValueSetName", 
+                	title: '<@spring.message "hreport.lov.flexvset.flexvaluesetname"/>',
+                	width: 200
+                }, { 
+                	field: "validationType", 
+                	title: '<@spring.message "hreport.lov.flexvset.validationtype"/>',
+                	width: 50,
+                	hidden:true
+                }, 
+                { 
+                	field: "description", 
+                	title: '<@spring.message "hreport.lov.flexvset.description"/>',
+                	width: 400
+                }, 
+                {
+                	field: "enabledFlag", 
+                	title: '<@spring.message "hreport.lov.flexvset.enabledflag"/>',
+                	width: 50,
+                	template: function(dataItem){
+                        var v = dataItem.enabledFlag;
+                         $.each(yesOrNo,function(i,n){
+                            if(n.value == v){
+                                v = n.meaning;
+                                return false;
+                            }
+                        })
+                        return v;
+                    }, editor: function(container, options){
+                        $('<input required name="' + options.field + '"/>')
+                        .appendTo(container)
+                        .kendoDropDownList({
+                            dataTextField: "meaning",
+                            dataValueField: "value",
+                            dataSource: yesOrNo
+                        });
+                    } 
+                },
+                {attributes: {style: "text-align:center"}, command : [
+                    {
+	                    text : '<@spring.message "hap.delete"/>',
+	                    click: function(e){
+	                        e.preventDefault();
+	                        var source = $("#flexVsetList").data('kendoGrid').dataSource,
+	                        data = this.dataItem($(e.target).closest("tr"));
+	                        source.remove(data)
+	                        source.sync()
+	                    }
+	                }
+                ],  width : 70} ],
+                editable: true
+        });
+        
+        //设置列
+        $(".k-grid-test").click(function(){
+        	var grid = $("#flexVsetList").data("kendoGrid");
+        	var dataRows = grid.items();
+        	// 获取行号
+        	var rowIndex = dataRows.index(grid.select());
+        	// 获取行对象
+        	var vset = grid.dataItem(grid.select());
+        	if(vset==null)
+    		{
+    			alert(selectOne);
+    		}
+    		else{
+            	$("#lovWin").data("kendoWindow").center().open();
+            	getValidataTableGrid(vset);
+    		}
+        })
+        
+        
+        
+        /************************************************************************/
+        
+        var BaseUrl2 = "/core/rep/validateTable/",
+        dataSource2 = new kendo.data.DataSource({
+            transport: {
+                read:  {
+                    url: BaseUrl2 + "query",
+                    type : "POST",
+                    dataType: "json"
+                },
+                update: {
+                    url: BaseUrl2 + "submit",
+                    type : "POST" ,
+                    contentType: "application/json"
+                },
+                destroy: {
+                    url: BaseUrl2 + "delete",
+                    type : "POST" ,
+                    contentType: "application/json"
+                },
+                create: {
+                    url: BaseUrl2 + "submit",
+                    type : "POST" ,
+                    contentType: "application/json"
+                },
+                parameterMap: function(options, type) {
+                	var grid = $("#flexVsetList").data("kendoGrid");
+                	var dataRows = grid.items();
+                	// 获取行号
+                	var rowIndex = dataRows.index(grid.select());
+                	// 获取行对象
+                	var vset = grid.dataItem(grid.select());
+                    if (type !== "read" && options.models) {
+                        var datas = options.models
+                        if(type =='create' || type =='update'){
+                            datas = options.models.map(function(data){
+                                data['__status'] = (type =='create' ? 'add' : 'update');
+                            	var validateTables = $("#validateTableList").data("kendoGrid");
+                            	var validateTablesData=validateTables._data;
+                            	if(!isOne(validateTablesData))
+                           		{
+                            		data['__status']="error!";
+                           		}
+                                data['flexValueSetId'] = vset.id;
+                                return data;
+                            })
+                        }
+                        return kendo.stringify(datas);
+                    } else if (type === "read") {
+                        var map = {};
+                        if (options.page) 
+                            map.page = options.page; 
+                        if (options.pageSize) 
+                            map.pagesize = options.pageSize;
+                        for(var k in map){
+                        	if(map[k]==='')delete map[k]
+                        }
+                    	map['flexValueSetId'] = vset.id;
+                        return map;
+                    }  
+                }
+            },
+            batch: true,
+            serverPaging : true,
+            pageSize: 10,
+            schema: {
+                data:'rows',
+                total:'total',
+                model: {
+                	id: "validateTableId",
+                    fields: {
+                    	columnName: { editable: true, validation: { required: true } },
+                    	columnAlias:{ editable: true, validation: { required: true } },
+                    	conditionFlag: { editable: true,validation: { required: true } },
+                    	columnFlag: { editable: true,validation: { required: true } },
+                    	description: { editable: true,validation: { required: true } },
+                    	width:{type:"number",validation: { min:0,required: true }},
+                    	textField:{validation: { required: true }},
+                    	valueField:{validation: { required: true }},
+                    	hiddenFlag: { validation: { required: true } },
+                    	enabledFlag: { validation: { required: true } },
+                    }
+                },
+                errors: function(res){
+                    if(!res.success && res.message) {
+                        return res.message;
+                    }
+                }
+            },
+            error: function(e) {
+                alert(e.errors)
+            }
+        });
+        $("#validateTableList").kendoGrid({
+        	dataSource: dataSource2,
+            resizable: true,
+            selectable: "single",
+            autoBind: false,
+            scrollable: false,
+            pageable: {
+                pageSizes:[5, 10, 20, 50],
+                refresh:true,
+                buttonCount:5,
+                messages: {
+                    noRecords: "未找到任何数据",
+                    display: "{0} - {1} 共 {2} 条数据",
+                    empty: "没有数据",
+                    page: "页",
+                    of: "/ {0}",
+                    itemsPerPage: "条每页",
+                    first: "第一页",
+                    previous: "前一页",
+                    next: "下一页",
+                    last: "最后一页",
+                    refresh: "刷新"
+                }
+            },
+            toolbar: [{ 
+                name:"create", 
+                text:'<@spring.message "hap.new"/>'
+            },{
+                name:"save",
+                text:'<@spring.message "hap.save"/>'
+            },{
+                name:"cancel",
+                text:'<@spring.message "hap.cancel"/>'
+       		}],
+            columns: [
+                { 
+                	field: "columnName", 
+                	title: '<@spring.message "hreport.lov.validatetable.columnname"/>',
+                	width: 100 
+                }, { 
+                	field: "columnAlias", 
+                	title: '<@spring.message "hreport.lov.validatetable.columnalias"/>',
+                	width: 100 
+                }, 
+                { 
+                	field: "conditionFlag", 
+                	title: '<@spring.message "hreport.lov.validatetable.conditionflag"/>',
+                	width: 50,
+                	template: function(dataItem){
+                        var v = dataItem.conditionFlag;
+                         $.each(yesOrNo,function(i,n){
+                            if(n.value == v){
+                                v = n.meaning;
+                                return false;
+                            }
+                        })
+                        return v;
+                    }, editor: function(container, options){
+                        $('<input required name="' + options.field + '"/>')
+                        .appendTo(container)
+                        .kendoDropDownList({
+                            dataTextField: "meaning",
+                            dataValueField: "value",
+                            dataSource: yesOrNo
+                        });
+                    } 
+                }, 
+                {
+                	field: "columnFlag", 
+                	title: '<@spring.message "hreport.lov.validatetable.columnflag"/>',
+                	width: 50,
+                	template: function(dataItem){
+                        var v = dataItem.columnFlag;
+                         $.each(columnFlags,function(i,n){
+                            if(n.value == v){
+                                v = n.meaning;
+                                return false;
+                            }
+                        })
+                        return v;
+                    }, editor: function(container, options){
+                        $('<input required name="' + options.field + '"/>')
+                        .appendTo(container)
+                        .kendoDropDownList({
+                            dataTextField: "meaning",
+                            dataValueField: "value",
+                            dataSource: columnFlags
+                        });
+                    } 
+                },
+                { 
+                	field: "description", 
+                	title: '<@spring.message "hreport.lov.validatetable.description"/>',
+                	width: 70 
+                }, { 
+                	field: "width", 
+                	title: '<@spring.message "hreport.lov.validatetable.width"/>',
+                	width: 70 
+                }, 
+                { 
+                	field: "valueField", 
+                	title: '<@spring.message "hreport.lov.validatetable.valuefield"/>',
+                	width: 100 ,
+                	template: function(dataItem){
+                        var v = dataItem.valueField;
+                         $.each(yesOrNo,function(i,n){
+                            if(n.value == v){
+                                v = n.meaning;
+                                return false;
+                            }
+                        })
+                        return v;
+                    }, editor: function(container, options){
+                        $('<input required name="' + options.field + '"/>')
+                        .appendTo(container)
+                        .kendoDropDownList({
+                            dataTextField: "meaning",
+                            dataValueField: "value",
+                            dataSource: yesOrNo
+                        });
+                    } 
+                }, 
+                {
+                	field: "textField", 
+                	title: '<@spring.message "hreport.lov.validatetable.textfield"/>',
+                	width: 100 ,
+                	template: function(dataItem){
+                        var v = dataItem.textField;
+                         $.each(yesOrNo,function(i,n){
+                            if(n.value == v){
+                                v = n.meaning;
+                                return false;
+                            }
+                        })
+                        return v;
+                    }, editor: function(container, options){
+                        $('<input required name="' + options.field + '"/>')
+                        .appendTo(container)
+                        .kendoDropDownList({
+                            dataTextField: "meaning",
+                            dataValueField: "value",
+                            dataSource: yesOrNo
+                        });
+                    } 
+                },
+                { 
+                	field: "algin", 
+                	title: '<@spring.message "hreport.lov.validatetable.algin"/>',
+                	width: 70 ,
+                	hidden:true
+                }, { 
+                	field: "hiddenFlag", 
+                	title: '<@spring.message "hreport.lov.validatetable.hiddenflag"/>',
+                	width: 50,
+                	template: function(dataItem){
+                        var v = dataItem.hiddenFlag;
+                         $.each(yesOrNo,function(i,n){
+                            if(n.value == v){
+                                v = n.meaning;
+                                return false;
+                            }
+                        })
+                        return v;
+                    }, editor: function(container, options){
+                        $('<input required name="' + options.field + '"/>')
+                        .appendTo(container)
+                        .kendoDropDownList({
+                            dataTextField: "meaning",
+                            dataValueField: "value",
+                            dataSource: yesOrNo
+                        });
+                    } 
+                }, 
+                { 
+                	field: "enabledFlag", 
+                	title: '<@spring.message "hreport.lov.validatetable.enabledflag"/>',
+                	width: 50,
+                	template: function(dataItem){
+                        var v = dataItem.enabledFlag;
+                         $.each(yesOrNo,function(i,n){
+                            if(n.value == v){
+                                v = n.meaning;
+                                return false;
+                            }
+                        })
+                        return v;
+                    }, editor: function(container, options){
+                        $('<input required name="' + options.field + '"/>')
+                        .appendTo(container)
+                        .kendoDropDownList({
+                            dataTextField: "meaning",
+                            dataValueField: "value",
+                            dataSource: yesOrNo
+                        });
+                    } 
+                }, 
+                {attributes: {style: "text-align:center"}, command : [
+                    {
+                        text : '<@spring.message "hap.delete"/>',
+                        click: function(e){
+                            e.preventDefault();
+                            var source = $("#validateTableList").data('kendoGrid').dataSource,
+                            data = this.dataItem($(e.target).closest("tr"));
+                            source.remove(data)
+                            source.sync()
+                        }
+                    }
+                ],  width : 70} ],
+                editable: true
+        });
+
+
+        
+        
+        
+    });
+    
+
+    //获取值集的详细信息
+    function getValidataTableGrid()
+    {
+    	$("#validateTableList").data('kendoGrid').dataSource.read();
+    	var grid = $("#flexVsetList").data("kendoGrid");
+    	var dataRows = grid.items();
+    	// 获取行号
+    	var rowIndex = dataRows.index(grid.select());
+    	// 获取行对象
+    	var vset = grid.dataItem(grid.select());
+    	vset=getValueSet(vset.id);
+    	addVsetToHtml(vset);
+    }
+    
+    function isOne(data){
+    	var j=0;
+    	var k=0;
+    	if(data.length>0)
+   		{
+        	for(var i=0;i<data.length;i++)
+       		{
+        		if(data[i].columnFlag=="Y" && data[i].valueField=="Y")
+       			{
+        			j++;
+       			}
+        		if(data[i].columnFlag=="Y" && data[i].textField=="Y")
+       			{
+        			k++;
+       			}
+       		}
+   		}
+    	if(j>1 || j<1 || k>1 || k<1)
+   		{
+    		alert(valuefield+","+textfield+" "+notOnlyOne);
+    		return false;
+   		}
+    	return true;
+    }
+    
+
+</script>
+<script type="text/javascript" src="${base.contextPath}/resources/js/report/lov.js"></script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="hreport.core.report.mapper.ValidateTableMapper">
+
+	<resultMap id="baseResult" type="hreport.core.report.dto.ValidateTable">
+		<id column="validate_table_id" property="validateTableId" jdbcType="DECIMAL"/>
+		<result column="flex_value_set_id" property="flexValueSetId" jdbcType="DECIMAL"/>
+		<result column="column_name" property="columnName" jdbcType="VARCHAR"/>
+		<result column="column_flag" property="columnFlag" jdbcType="VARCHAR"/>
+		<result column="condition_flag" property="conditionFlag" jdbcType="VARCHAR"/>
+		<result column="description" property="description" jdbcType="VARCHAR"/>
+		<result column="width" property="width" jdbcType="DECIMAL"/>
+		<result column="value_field" property="valueField" jdbcType="VARCHAR"/>
+		<result column="text_field" property="textField" jdbcType="VARCHAR"/>
+		<result column="hidden_flag" property="hiddenFlag" jdbcType="VARCHAR"/>
+		<result column="algin" property="algin" jdbcType="VARCHAR"/>
+		<result column="enabled_flag" property="enabledFlag" jdbcType="VARCHAR"/>
+		<result column="column_alias" property="columnAlias" jdbcType="VARCHAR"/>
+		<result column="object_version_number" property="objectVersionNumber" jdbcType="DECIMAL"/>
+	</resultMap>
+	
+	<select id="getByFlexValueSetId" parameterType="Long" resultMap="baseResult">
+		select * from rep_validate_table_b where flex_value_set_id=#{flexValueSetId}
+	</select>
+</mapper>

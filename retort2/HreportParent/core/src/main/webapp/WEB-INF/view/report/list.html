@@ -1,0 +1,1179 @@
+
+
+
+<#include "../include/header.html">
+
+<script src="${base.contextPath}/resources/js/report/showFormElements.js"></script>
+<script src="${base.contextPath}/resources/js/report/reportList.js"></script>
+<script src="${base.contextPath}/resources/js/report/jszip.min.js"></script>
+<link href="${base.contextPath}/resources/css/report/lov.css" rel="stylesheet" type="text/css" />
+<link href="${base.contextPath}/resources/css/report/report.css" rel="stylesheet" type="text/css" />
+<meta charset="UTF-8"> 
+<body>
+
+    <div id="page-content">     
+    	<div class="panel">
+            <form class="form-horizontal">
+                <div class="panel-body">
+                    	<div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label"><@spring.message "hreport.rep.header.name"/></label>
+                                <div class="col-sm-9">
+                                    <input type="text" style="width:100%" data-bind="value:model.name" class="k-textbox">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label"><@spring.message "hreport.rep.header.programName"/></label>
+                                <div class="col-sm-9">
+                                    <input type="text" style="width:100%" data-bind="value:model.programName" class="k-textbox">
+                                </div>
+                            </div>
+                        </div>
+                </div>
+                <div class="panel-footer text-right">
+                    <span class="btn btn-success" data-bind="click:queryResource" type="submit"><@spring.message "hap.query"/></span>
+                </div>
+            </form>
+        </div>  
+    	<div id="reportListGrid" style="clear:both"></div>
+    </div>
+	<div id="window">
+	    <div id="tabstrip"> 
+		    <ul> 
+			    <li class="k-state-active"> <@spring.message "hreport.rep.line.setline"/> </li> 
+			    <li> <@spring.message "hreport.rep.params.setparams"/></li> 
+		    </ul> 
+		
+		    <div> 
+		       	<div id="page-content">       
+		            <div id="reportLinesGrid" style="clear:both">
+		            </div>
+	        	</div>
+		    </div> 
+		
+			
+		    <div> 
+		        <div id="page-content1">       
+		            <div id="paramsList" style="clear:both">
+		            </div>
+		        </div>
+		    </div> 
+	    </div> 
+    </div>
+    
+    <!-- 渲染报表 -->
+    <div id="formElementsWin">
+	    
+    </div>
+    <!-- lov弹出框 -->
+    <div id="lovWin">
+	    
+    </div>
+    
+     <!-- 编辑SQL弹出框 -->
+    <div id="SQLWin">
+        <span id="RowIndexSpan" style="visibility:hidden"></span>
+	    <textarea rows="10" cols="80" id="SQLTextarea"></textarea>
+	    <br/>
+	    <button class="btn btn-success" id="SQLComfirm">确认修改</button>
+    </div>
+    
+    
+    <script type="text/javascript">
+	    $(document).ready(function() {
+	    	
+	    	//gridID全局变量  ,columnName全局变量
+	    	gridId='';
+	    	columnName='';
+	    	//多语言常量
+	    	query='<@spring.message "hap.query"/>';
+	    	confirm='<@spring.message "hap.confirm"/>';
+	    	notEmpty='<@spring.message "hreport.rep.notempty"/>';
+	    	addSuccess='<@spring.message "hreport.rep.addsuccess"/>';
+	    	selectOne='<@spring.message "hreport.rep.selectOne"/>';
+	    	reAnalysis='<@spring.message "hreport.rep.reanalysis"/>';
+	    	informationNotEnough='<@spring.message "hreport.lov.validatetable.notenough"/>';
+	    	error='<@spring.message "hap.error"/>';
+	    	
+	    	//查询条件绑定数据
+		    var viewModel = kendo.observable({
+		        model:{},
+		        queryResource: function(e) {
+		            $('#reportListGrid').data('kendoGrid').dataSource.read();
+		        }
+		    });
+		    kendo.bind($('#page-content'),viewModel)
+
+	    	//tab页
+	        $("#tabstrip").kendoTabStrip({
+	            animation:  {
+	                open: {
+	                    effects: "fadeIn"
+	                }
+	            }
+	        });
+	        //列和参数window
+            $("#window").kendoWindow({
+            	width: "1200px",
+            	height:"500px",
+            	modal: true,
+                title: "Params",
+                actions: [
+                    "Pin",
+                    "Minimize",
+                    "Maximize",
+                    "Close"
+                ],
+                visible: false
+            });
+	        
+	        //是否数据源
+	        var yesOrNo=[];
+	    	$.ajax({
+	    		type: "post",
+	    		async: false,
+	    		url:"/core/rep/compenentContent/getCodeValuesByCode",
+	    		data:{
+	    			"code":"SYS.YES_NO"
+	    		},
+	    		success:function(data){
+	    			yesOrNo=data;
+	    		},
+	    		errors:function(){
+	    			alert(error)					
+	    		}
+	    	});
+	        
+	        
+	      //数据源下拉选项
+	    	var sqlDataSource=[];
+	    	$.ajax({
+	    		type: "post",
+	    		async: false,
+	    		url:"/core/rep/dataSource/query",
+	    		contentType: "application/json",
+	    		success:function(data){
+	    			sqlDataSource=data.rows;
+	    		},
+	    		errors:function(){
+	    			alert(error)					
+	    		}
+	    	});
+	    	
+	    	//header是否启用下拉选项
+	    	var headerEnable=yesOrNo;
+	    	
+
+
+	    	
+	    		/*--------------header部分代码------------------------*/
+	    	
+	    	    //header列表
+	            var BaseUrlHeader = "${base.contextPath}/rep/reportHeader/",
+	            dataSource = new kendo.data.DataSource({
+	                transport: {
+	                    read:  {
+	                        url: BaseUrlHeader + "query",
+	                        type : "POST",
+	                        dataType: "json"
+	                    },
+	                    update: {
+	                        url: BaseUrlHeader + "submit",
+	                        type : "POST" ,
+	                        contentType: "application/json"
+	                    },
+	                    destroy: {
+	                        url: BaseUrlHeader + "delete",
+	                        type : "POST" ,
+	                        contentType: "application/json"
+	                    },
+	                    create: {
+	                        url: BaseUrlHeader + "submit",
+	                        type : "POST" ,
+	                        contentType: "application/json"
+	                    },
+	                    parameterMap: function(options, type) {
+	                        if (type !== "read" && options.models) {
+	                            var datas = options.models
+	                            if(type =='create' || type =='update'){
+	                                datas = options.models.map(function(data){
+	                                    data['__status'] = (type =='create' ? 'add' : 'update');
+	                                    return data;
+	                                })
+	                            }
+	                            return kendo.stringify(datas);
+	                        } else if (type === "read") {
+	                            var model = viewModel.model;
+	                            var map = {name: model.name,programName: model.programName}
+	                            //var map = {};
+	                            if (options.page) 
+	                                map.page = options.page; 
+	                            if (options.pageSize) 
+	                                map.pagesize = options.pageSize;
+	                            for(var k in map){
+	                            	if(map[k]==='')delete map[k]
+	                            }
+	                            return map;
+	                        }  
+	                    }
+	                },
+	                batch: true,
+	                serverPaging : true,
+	                pageSize: 10,
+	                schema: {
+	                    data:'rows',
+	                    total:'total',
+	                    model: {
+	                    	id: "repHeaderId",
+	                        fields: {
+	                        	name: { editable: true, validation: { required: true } },
+	                        	dsId: { editable: true, validation: { required: true } },
+	                        	programName: { editable: true, validation: { required: true } },
+	                        	sqlText: { editable: true, validation: { required: true } },
+	                        	enable: {editable:true,validation: { required: true }}
+	                        }
+	                    },
+	                    errors: function(res){
+	                        if(!res.success && res.message) {
+	                            return res.message;
+	                        }
+	                    }
+	                },
+	                error: function(e) {
+	                    alert(e.errors)
+	                }
+	            });
+
+	            $("#reportListGrid").kendoGrid({
+	            	dataSource: dataSource,
+	                resizable: false,
+	                reorderable:true,
+	                selectable: "single",
+	                scrollable: true,
+	                sortable:true,
+	                pageable: {
+	                    pageSizes:[5, 10, 20, 50],
+	                    refresh:true,
+	                    buttonCount:5,
+	                    messages: {
+	                        noRecords: "未找到任何数据",
+	                        display: "{0} - {1} 共 {2} 条数据",
+	                        empty: "没有数据",
+	                        page: "页",
+	                        of: "/ {0}",
+	                        itemsPerPage: "条每页",
+	                        first: "第一页",
+	                        previous: "前一页",
+	                        next: "下一页",
+	                        last: "最后一页",
+	                        refresh: "刷新"
+	                    }
+	                },
+	                toolbar: [{ 
+	                    name:"create", 
+	                    text:'<@spring.message "hap.new"/>'
+	                },{
+	                    name:"save",
+	                    text:'<@spring.message "hap.save"/>'
+	                },{
+	                    name:"cancel",
+	                    text:'<@spring.message "hap.cancel"/>'
+	           		},{
+	                    name:"analysis",
+	                    text:'<@spring.message "hreport.rep.header.analysis"/>'
+	           		},{
+	                    name:"showWindow",
+	                    text:'<@spring.message "hreport.rep.header.showlinesandparams"/>'
+	           		},{
+	                    name:"showFormElementsWin",
+	                    text:'<@spring.message "hreport.rep.drawparams"/>'
+	           		}],
+	                columns: [
+	                    { 
+	                    	field: "name", 
+	                    	title: '<@spring.message "hreport.rep.header.name"/>',
+	                    	width: 70 
+	                    }, 
+	                    { 
+	                    	field: "dsId", 
+	                    	title: '<@spring.message "hreport.rep.header.dsid"/>',
+	                    	width: 210,
+	                    	template: function(dataItem){
+	                            var v = dataItem.dsId;
+	                             $.each(sqlDataSource,function(i,n){
+	                                if(n.dataSourceId == v){
+	                                    v = n.name;
+	                                    return false;
+	                                }
+	                            })
+	                            return v;
+	                        }, editor: function(container, options){
+	                            $('<input required name="' + options.field + '"/>')
+	                            .appendTo(container)
+	                            .kendoDropDownList({
+	                                dataTextField: "name",
+	                                dataValueField: "dataSourceId",
+	                                dataSource: sqlDataSource
+	                            });
+	                        } 
+	                    }, 
+	                    { 
+	                    	field: "programName", 
+	                    	title: '<@spring.message "hreport.rep.header.programname"/>',
+	                    	width: 70 
+	                    }, 
+	                    { 
+	                    	field: "sqlText", 
+	                    	title: '<@spring.message "hreport.rep.header.sqltext"/>',
+	                    	width: 140 ,
+	                    	attributes: {
+	                            style: 'white-space: nowrap '
+	                          }
+	                    }, 
+	                    {
+	                    	field: "enable", 
+	                    	template: function(dataItem){
+	                            var v = dataItem.enable;
+	                            $.each(headerEnable,function(i,n){
+	                                if(n.value == v){
+	                                    v = n.meaning;
+	                                    return false;
+	                                }
+	                            })
+	                            return v;
+	                        }, 
+	                        editor: function(container, options){
+	                            $('<input required name="' + options.field + '"/>')
+	                            .appendTo(container)
+	                            .kendoDropDownList({
+	                                dataTextField: "meaning",
+	                                dataValueField: "value",
+	                                dataSource: headerEnable
+	                            });
+	                        },
+	                    	title: '<@spring.message "hreport.rep.header.enable"/>',
+	                    	width: 35 ,
+	                    	attributes: {style: "text-align:center"}, 
+	                    }, 
+	                    {
+	                    	attributes: {style: "text-align:center"}, 
+	                    	command : [{
+   	    	                    text : '编辑sql',
+   	    	                    click: function(e){
+   	    	                    	$("#SQLWin").data("kendoWindow").center().open();
+   	    	                    	gridId="reportListGrid";
+   	    	                    	columnName="sqlText";
+   	    	                        var dataItemSQL = $("#reportListGrid").data("kendoGrid").dataItem(e.target.closest("tr"));
+   	    		            	    var rowindex=$(e.target).closest("tr")[0].rowIndex;
+   	    	                        var content = dataItemSQL.sqlText;
+   	    		            	    $("#SQLTextarea").val(content);
+   	    		            	    $("#RowIndexSpan").text(rowindex);
+                                }
+                            }],  
+	                        width : 60
+	                     },
+	                    {
+	                    	attributes: {style: "text-align:center"}, 
+	                    	command : [
+	                        {
+	    	                    text : '<@spring.message "hap.delete"/>',
+	    	                    click: function(e){
+	    	                        e.preventDefault();
+	    	                        var source = $("#reportListGrid").data('kendoGrid').dataSource,
+	    	                        data = this.dataItem($(e.target).closest("tr"));
+	    	                        source.remove(data)
+	    	                        source.sync()
+	    	                    }
+	    	                }
+	                    	],  
+	                    	width : 40
+	                    } ],
+	                    editable: true
+	            });
+	            
+	            $("#reportListGrid").kendoTooltip({
+	            	   filter: "td:nth-child(4)", 
+	            	   position: "bottom", 
+	            	   content: function(e){
+	            	    var dataItem = $("#reportListGrid").data("kendoGrid").dataItem(e.target.closest("tr"));
+	            	    var content = dataItem.sqlText;
+	            	    return content
+	            	   }
+	            	 }).data("kendoTooltip");
+
+
+	            
+	            
+	            //analysis按钮点击事件
+	        	$(".k-grid-analysis").click(function(){
+	        		var data=getSelected();
+	        		if(data==null)
+	        		{
+	        			alert(selectOne);
+	        		}
+	        		else{
+	        			analysisLines(data);
+	        			analysisParams(data);
+	        		}
+	        	})
+	        	
+	        	//设置窗口按钮点击事件
+	        	$(".k-grid-showWindow").click(function(){
+	        		var data=getSelected();
+	        		if(data==null)
+	        		{
+	        			alert(selectOne);
+	        		}
+	        		else{
+		        		showLines(data);
+		        		showParams(data);
+		        		$("#window").data("kendoWindow").center().open();
+	        		}
+	        	})
+	        	
+	        	   <!--渲染SQL弹出框-->
+	            $("#SQLWin").kendoWindow({
+	            	width: "660px",
+	            	height:"480px",
+	            	resizable: true,
+	            	modal: true,
+	                title: "SQL",
+	                actions: [
+	                    "Pin",
+	                    "Minimize",
+	                    "Maximize",
+	                    "Close"
+	                ],
+	                visible: false
+	            });
+	            
+	            //编辑按钮点击事件，用来弹出编辑窗口
+	            $("#SQLComfirm").click(function(){
+	            	var source = $("#"+gridId).data('kendoGrid').dataSource;
+	            	var rowindex=$("#RowIndexSpan").text();
+	            	var contentSQL=$("#SQLTextarea").val();
+	            	source._view[rowindex].set(columnName,contentSQL);
+	            	$("#RowIndexSpan").text("");
+	            	gridname='';
+	            	key='';
+	            	$("#SQLWin").data("kendoWindow").close();
+	            });
+	        	
+
+	        	
+	        	
+	        	
+	            
+	            /*--------------------reportLine部分代码------------------*/
+	            
+	            
+	            //line排序下拉选项
+	    		var sortData=[];
+	        	$.ajax({
+		    		type: "post",
+		    		async: false,
+		    		url:"/core/rep/compenentContent/getCodeValuesByCode",
+		    		data:{
+		    			"code":"REP.REPORT_SORT"
+		    		},
+		    		success:function(data){
+		    			sortData=data;
+		    		},
+		    		errors:function(){
+		    			alert(error)					
+		    		}
+		    	});
+	            
+	    		//line是否显示下拉选项
+	    		var displayData=yesOrNo;
+	            
+	            
+	        	
+	    		//line
+	            var BaseUrlLine = "/core/rep/reportLine/";
+	                dataSource2 = new kendo.data.DataSource({
+	                    transport: {
+	                        read:  {
+	                            url: BaseUrlLine + "getLines",
+	                            type : "POST",
+	                            dataType: "json",
+	                        },
+	                        update: {
+	                            url: BaseUrlLine + "submit",
+	                            type : "POST" ,
+	                            contentType: "application/json"
+	                        },
+	                        destroy: {
+	                            url: BaseUrlLine + "delete",
+	                            type : "POST" ,
+	                            contentType: "application/json"
+	                        },
+	                        create: {
+	                            url: BaseUrlLine + "submit",
+	                            type : "POST" ,
+	                            contentType: "application/json"
+	                        },
+	                        parameterMap: function(options, type) {
+	                            if (type !== "read" && options.models) {
+	                                var datas = options.models
+	                                if(type =='create' || type =='update'){
+	                                    datas = options.models.map(function(data){
+	                                        data['__status'] = (data.repLineId ==null||data.repLineId=="" ? 'add' : 'update');
+	                                        return data;
+	                                    })
+	                                }
+	                                return kendo.stringify(datas);
+	                            } else if (type === "read") {
+	                                var map = {};
+	                                for(var k in map){
+	                                	if(map[k]==='')delete map[k]
+	                                }
+	    /*                             var data=getSelected();
+	                            	var sql = data.sqlText;
+	                            	var dsId = data.dsId;
+	                                map.sqlText=sql;
+	                                map.dsId=dsId; */
+	                                return map;
+	                            }  
+	                        }
+	                    },
+	                    batch: true,
+	                    serverPaging : true,
+	                    pageSize: 10,
+	                    schema: {
+	                        data:'rows',
+	                        total:'total',
+	                        model: {
+	                        	id: "repLineId",
+	                            fields: {
+	                            	columnName: {editable: false},
+	                            	name: { editable: true, validation: { required: true } },
+	                            	type: {},
+	                            	dataType:{editable: false,validation: { required: true }},
+	                            	columnWidth:{editable: false,validation: { required: true }},
+	                            	displayWidth:{type:"number",validation: { min:0,required: true}},
+	                            	format:{editable:true},
+	                            	sort:{editable:true,validation: { required: true }},
+	                            	display:{editable:true,validation: { required: true }}
+	                            }
+	                        },
+	                        errors: function(res){
+	                            if(!res.success && res.message) {
+	                                return res.message;
+	                            }
+	                        }
+	                    },
+	                    error: function(e) {
+	                        alert(e.errors)
+	                    }
+	                }); 
+
+	            $("#reportLinesGrid").kendoGrid({
+	            	dataSource: dataSource2,
+	                resizable: true,
+	                autoBind: false,
+	                selectable: "single",
+	                scrollable: false,
+	                toolbar: [{
+	                    name:"save",
+	                    text:'<@spring.message "hap.save"/>'
+	                },{
+	                    name:"reAnalysisLines",
+	                    text:reAnalysis
+	                }],
+	                columns: [
+	    				{ 
+	    					field: "headerId",
+	    					hidden:true,
+	    					title: '<@spring.message "hreport.rep.line.headerid"/>',
+	    					width: 70 
+	    				}, 
+	                    { 
+	                    	field: "columnName", 
+	                    	title: '<@spring.message "hreport.rep.line.columnname"/>',
+	                    	width: 70 
+	                    }, 
+	                    { 
+	                    	field: "name", 
+	                    	title: '<@spring.message "hreport.rep.line.name"/>',
+	                    	width: 200 
+	                    }, 
+	                    { 
+	                    	field: "type", 
+	                    	title: '<@spring.message "hreport.rep.line.type"/>',
+	                    	width: 70 
+	                    }, 
+	                    { 
+	                    	field: "dataType", 
+	                    	title: '<@spring.message "hreport.rep.line.datatype"/>',
+	                    	width: 70 
+	                    }, 
+	                    { 
+	                    	field: "columnWidth", 
+	                    	title: '<@spring.message "hreport.rep.line.columnwidth"/>',
+	                    	width: 70
+	                    }, 
+	                    { 
+	                    	field: "displayWidth", 
+	                    	title: '<@spring.message "hreport.rep.line.displaywidth"/>',
+	                    	width: 70 ,
+	                    	template:function(dataItem){
+	                    		var displayWidth=dataItem.displayWidth;
+	                    		if(displayWidth==null)
+	                   			{
+	                    			dataItem.displayWidth=50;
+	                    			return 50;
+	                   			}else
+	                			{
+	                   				return displayWidth;
+	                			}
+	                    	}
+	                    }, 
+	                    { 
+	                    	field: "format", 
+	                    	title: '<@spring.message "hreport.rep.line.format"/>',
+	                    	width: 70 
+	                    }, 
+	                    { 
+	                    	field: "sort", 
+	                    	title: '<@spring.message "hreport.rep.line.sort"/>',
+	                    	width: 70 ,
+	                    	template: function(dataItem){
+	                            var v = dataItem.sort;
+	                             $.each(sortData,function(i,n){
+	                                if(n.value == v){
+	                                    v = n.meaning;
+	                                    return false;
+	                                }
+	                            })
+	                            return v;
+	                        }, editor: function(container, options){
+	                            $('<input required name="' + options.field + '"/>')
+	                            .appendTo(container)
+	                            .kendoDropDownList({
+	                                dataTextField: "meaning",
+	                                dataValueField: "value",
+	                                dataSource: sortData
+	                            });
+	                        } 
+	    	            }, 
+	                    {
+	    	               	field: "display", 
+	    	               	title: '<@spring.message "hreport.rep.line.display"/>',
+	    	               	width: 70 ,
+	    	               	template: function(dataItem){
+	                            var v = dataItem.display;
+	                             $.each(displayData,function(i,n){
+	                                if(n.value == v){
+	                                    v = n.meaning;
+	                                    return false;
+	                                }
+	                            })
+	                            return v;
+	                        }, editor: function(container, options){
+	                            $('<input required name="' + options.field + '"/>')
+	                            .appendTo(container)
+	                            .kendoDropDownList({
+	                                dataTextField: "meaning",
+	                                dataValueField: "value",
+	                                dataSource: displayData
+	                            });
+	                        } 
+	                  	} 
+	    	         ],
+	                 editable: true
+	            });
+	            
+	        	$(".k-grid-reAnalysisLines").click(function(){
+	        		var data=getSelected();
+	        		if(data==null)
+	        		{
+	        			alert(selectOne);
+	        		}
+	        		else{
+	        			reAnalysisLines(data);
+	        		}
+	        	})
+	            
+	            
+	            /*--------------params部分代码--------------------*/
+	            
+	            
+				//是否必须数据源
+	           	var requiredData=yesOrNo;
+
+	        	
+	  	        //参数控件数据源
+		    	var formElement=[];
+		    	$.ajax({
+		    		type: "post",
+		    		async: false,
+		    		url:"/core/rep/compenentContent/getCodeValuesByCode",
+		    		data:{
+		    			"code":"REP.REPORT_COMPONET"
+		    		},
+		    		success:function(data){
+		    			formElement=data;
+		    		},
+		    		errors:function(){
+		    			alert(error)					
+		    		}
+		    	});
+		    	//数据来源数据源
+	           	var contentSourceData=[];
+	           	$.ajax({
+		    		type: "post",
+		    		async: false,
+		    		url:"/core/rep/compenentContent/getCodeValuesByCode",
+		    		data:{
+		    			"code":"REP.REPORT_CONTENT_SOURCE"
+		    		},
+		    		success:function(data){
+		    			contentSourceData=data;
+		    		},
+		    		errors:function(){
+		    			alert(error)					
+		    		}
+		    	});
+	           	//默认值类型
+	           	var defaultType=[];
+	           	for(var i=0;i<contentSourceData.length;i++)
+           		{
+	           		if(contentSourceData[i].value=="SQL" || contentSourceData[i].value=="STRING")
+           			{
+	           			defaultType.push(contentSourceData[i]);
+           			}
+           		}
+
+		    	//数据类型数据源
+	           	var dataType=[];
+	           	$.ajax({
+		    		type: "post",
+		    		async: false,
+		    		url:"/core/rep/compenentContent/getCodeValuesByCode",
+		    		data:{
+		    			"code":"REP.REPORT_DATA_TYPE"
+		    		},
+		    		success:function(data){
+		    			dataType=data;
+		    		},
+		    		errors:function(){
+		    			alert(error)					
+		    		}
+		    	});
+	            
+
+
+	             
+	            
+	        	//params
+	            var BaseUrlLine = "/core/rep/queryParams/";
+	                dataSource3 = new kendo.data.DataSource({
+	                    transport: {
+	                        read:  {
+	                            url: BaseUrlLine + "getParams",
+	                            type : "POST",
+	                            dataType: "json",
+	                        },
+	                        update: {
+	                            url: BaseUrlLine + "submit",
+	                            type : "POST" ,
+	                            contentType: "application/json"
+	                        },
+	                        destroy: {
+	                            url: BaseUrlLine + "delete",
+	                            type : "POST" ,
+	                            contentType: "application/json"
+	                        },
+	                        create: {
+	                            url: BaseUrlLine + "submit",
+	                            type : "POST" ,
+	                            contentType: "application/json"
+	                        },
+	                        parameterMap: function(options, type) {
+	                            if (type !== "read" && options.models) {
+	                                var datas = options.models
+	                                if(type =='create' || type =='update'){
+	                                    datas = options.models.map(function(data){
+	                                        data['__status'] = (data.queryParamsId ==null||data.queryParamsId =="" ? 'add' : 'update');
+	                                        return data;
+	                                    })
+	                                }
+	                                return kendo.stringify(datas);
+	                            } else if (type === "read") {
+	                                var map = {};
+	                                for(var k in map){
+	                                	if(map[k]==='')delete map[k]
+	                                }
+	                                var data=getSelected();
+	                            	var sql = data.sqlText;
+	                            	var dsId = data.dsId;
+	                                map.sqlText=sql;
+	                                map.dsId=dsId;
+	                                return map;
+	                            }  
+	                        }
+	                    },
+	                    batch: true,
+	                    serverPaging : true,
+	                    pageSize: 10,
+	                    schema: {
+	                        data:'rows',
+	                        total:'total',
+	                        model: {
+	                        	id: "id",
+	                            fields: {
+	                            	paramsName:{editable: false},
+	                            	name: { editable: true, validation: { required: true } },
+	                            	defaultType:{editable: true, validation: { required: true }},
+	                            	defaultValue:{},
+	                            	defaultText:{},
+	                            	dataType:{editable: true, validation: { required: true }},
+	                            	width:{type:"number",validation: { min:0,required: true}},
+	                            	showWidth:{type:"number",validation: { min:0,required: true}},
+	                            	formElement:{editable: true, validation: { required: true }},
+	                            	contentSource:{editable: true, validation: { required: true }},
+	                            	content:{editable: true, validation: { required: true }},
+	                            	required:{editable: true, validation: { required: true }},
+	                            	display:{editable: true, validation: { required: true }}
+	                            }
+	                        },
+	                        errors: function(res){
+	                            if(!res.success && res.message) {
+	                                return res.message;
+	                            }
+	                        }
+	                    },
+	                    error: function(e) {
+	                        alert(e.errors)
+	                    }
+	                }); 
+
+	            $("#paramsList").kendoGrid({
+	            	dataSource: dataSource3,
+	                resizable: false,
+	                autoBind: false,
+	                selectable: "single",
+	                scrollable: true,
+	                toolbar: [{
+	                    name:"save",
+	                    text:'<@spring.message "hap.save"/>'
+	                },{
+	                    name:"reAnalysisParams",
+	                    text:reAnalysis
+	                }],
+	                columns: [
+	    				{ 
+	    					field: "headerId",
+	    					hidden:true,
+	    					title: '<@spring.message "hreport.rep.params.headerid"/>',
+	    					width: 70 
+	    				}, 
+	    				{ 
+	                    	field: "paramsName", 
+	                    	title: '<@spring.message "hreport.rep.params.paramsname"/>',
+	                    	width: 70 
+	                    },
+	                    { 
+	                    	field: "name", 
+	                    	title: '<@spring.message "hreport.rep.params.name"/>',
+	                    	width: 70 
+	                    },
+	                    { 
+	                    	field: "defaultType", 
+	                    	title: '<@spring.message "hreport.rep.params.defaulttype"/>',
+	                    	width: 80 ,
+	                    	template: function(dataItem){
+	                            var v = dataItem.defaultType;
+	                             $.each(defaultType,function(i,n){
+	                                if(n.value == v){
+	                                    v = n.meaning;
+	                                    return false;
+	                                }
+	                            })
+	                            return v;
+	                        }, editor: function(container, options){
+	                            $('<input required name="' + options.field + '"/>')
+	                            .appendTo(container)
+	                            .kendoDropDownList({
+	                                dataTextField: "meaning",
+	                                dataValueField: "value",
+	                                dataSource: defaultType
+	                            });
+	                        } 
+	                    },
+	                    { 
+	                    	field: "defaultValue", 
+	                    	title: '<@spring.message "hreport.rep.params.defaultvalue"/>',
+	                    	width: 70 
+	                    },
+	                    { 
+	                    	field: "defaultText", 
+	                    	title: '<@spring.message "hreport.rep.params.defaulttext"/>',
+	                    	width: 70 
+	                    },
+	                    { 
+	                    	field: "dataType", 
+	                    	title: '<@spring.message "hreport.rep.params.datatype"/>',
+	                    	width: 70 ,
+	                    	template: function(dataItem){
+	                            var v = dataItem.dataType;
+	                             $.each(dataType,function(i,n){
+	                                if(n.value == v){
+	                                    v = n.meaning;
+	                                    return false;
+	                                }
+	                            })
+	                            return v;
+	                        }, editor: function(container, options){
+	                            $('<input required name="' + options.field + '"/>')
+	                            .appendTo(container)
+	                            .kendoDropDownList({
+	                                dataTextField: "meaning",
+	                                dataValueField: "value",
+	                                dataSource: dataType
+	                            });
+	                        } 
+	                    },
+	                    { 
+	                    	field: "width", 
+	                    	title: '<@spring.message "hreport.rep.params.width"/>',
+	                    	width: 70 
+	                    },
+	                    { 
+	                    	field: "showWidth", 
+	                    	title: '<@spring.message "hreport.rep.params.showwidth"/>',
+	                    	width: 85
+	                    },
+	                    { 
+	                    	field: "formElement", 
+	                    	title: '<@spring.message "hreport.rep.params.formelement"/>',
+	                    	width: 70 ,
+	                    	template: function(dataItem){
+	                            var v = dataItem.formElement;
+	                             $.each(formElement,function(i,n){
+	                                if(n.value == v){
+	                                    v = n.meaning;
+	                                    return false;
+	                                }
+	                            })
+	                            return v;
+	                        }, editor: function(container, options){
+	                            $('<input required name="' + options.field + '"/>')
+	                            .appendTo(container)
+	                            .kendoDropDownList({
+	                                dataTextField: "meaning",
+	                                dataValueField: "value",
+	                                dataSource: formElement,
+	                                change:function(){
+	                                	var grid = $("#paramsList").data("kendoGrid");
+	                                	var dataRows = grid.items();
+	                                	var rowIndex = dataRows.index(grid.select());
+	                                	var data = grid.dataItem(grid.select());
+	                                	data.set("contentSource",""); 
+	                                	$('.k-edit-cell').next().click(); 
+	                                }
+	                            });
+	                        } 
+	                    },
+	                    { 
+	                    	field: "contentSource", 
+	                    	title: '<@spring.message "hreport.rep.params.contentsource"/>',
+	                    	width: 70 ,
+	    	               	template: function(dataItem){
+	                            var v = dataItem.contentSource;
+	                             $.each(contentSourceData,function(i,n){
+	                                if(n.value == v){
+	                                    v = n.meaning;
+	                                    return false;
+	                                }
+	                            })
+	                            return v;
+	                        }, editor: function(container, options){
+	                        	var grid = $("#paramsList").data("kendoGrid");
+                            	var dataRows = grid.items();
+                            	var rowIndex = dataRows.index(grid.select());
+                            	var data = grid.dataItem(grid.select());
+                            	var formElement=data.formElement;
+                            	var contentSourceData=[];
+                            	
+                            	$.ajax({
+                		    		type: "post",
+                		    		async: false,
+                		    		url:"/core/rep/compenentContent/getContentSourceByFormElement",
+                		    		data:{
+                		    			"code":"REP.REPORT_CONTENT_SOURCE",
+                		    			"formElement":formElement
+                		    		},
+                		    		success:function(data){
+                		    			contentSourceData=data;
+                		    		},
+                		    		errors:function(){
+                		    			alert(error)					
+                		    		}
+                		    	});
+                            	
+	                            $('<input id="source" required name="' + options.field + '"/>')
+	                            .appendTo(container)
+	                            .kendoDropDownList({
+	                                dataTextField: "meaning",
+	                                dataValueField: "value",
+	                                dataSource: contentSourceData
+	                            });
+	                        } 
+	                    },
+	                    { 
+	                    	field: "content", 
+	                    	title: '<@spring.message "hreport.rep.params.content"/>',
+	                    	attributes: {
+	                            style: 'white-space: nowrap '
+	                        },
+	                    	width: 70 
+	                    },
+	                    { 
+	                    	field: "required", 
+	                    	title: '<@spring.message "hreport.rep.params.required"/>',
+	                    	width: 70 ,
+	                    	template: function(dataItem){
+	                            var v = dataItem.required;
+	                             $.each(requiredData,function(i,n){
+	                                if(n.value == v){
+	                                    v = n.meaning;
+	                                    return false;
+	                                }
+	                            })
+	                            return v;
+	                        }, editor: function(container, options){
+	                            $('<input required name="' + options.field + '"/>')
+	                            .appendTo(container)
+	                            .kendoDropDownList({
+	                                dataTextField: "meaning",
+	                                dataValueField: "value",
+	                                dataSource: requiredData
+	                            });
+	                        } 
+	                    },
+	                    { 
+	                    	field: "display", 
+	                    	title: '<@spring.message "hreport.rep.params.display"/>',
+	                    	width: 70 ,
+	                    	template: function(dataItem){
+	                            var v = dataItem.display;
+	                             $.each(displayData,function(i,n){
+	                                if(n.value == v){
+	                                    v = n.meaning;
+	                                    return false;
+	                                }
+	                            })
+	                            return v;
+	                        }, editor: function(container, options){
+	                            $('<input required name="' + options.field + '"/>')
+	                            .appendTo(container)
+	                            .kendoDropDownList({
+	                                dataTextField: "meaning",
+	                                dataValueField: "value",
+	                                dataSource: displayData
+	                            });
+	                        } 
+	                    },
+	                    {
+	                    	attributes: {style: "text-align:center,white-space: nowrap"}, 
+	                    	command : [{
+   	    	                    text : '编辑内容',
+   	    	                    click: function(e){
+   	    	                    	$("#SQLWin").data("kendoWindow").center().open();
+   	    	                    	gridId="paramsList";
+   	    	                    	columnName="content";
+   	    	                        var dataItemSQL = $("#paramsList").data("kendoGrid").dataItem(e.target.closest("tr"));     	    		            	    
+   	    	                        var rowindex=$(e.target).closest("tr")[0].rowIndex;   
+   	    	                        var content = dataItemSQL.content;
+   	    		            	    $("#SQLTextarea").val(content);
+   	    		            	    $("#RowIndexSpan").text(rowindex);
+                                }
+                            }],  
+	                        width : 100
+	                    },
+
+	                    ],
+	                    editable: true
+	            });
+	            
+	            
+	        	//解析params按钮点击事件
+	        	$(".k-grid-reAnalysisParams").click(function(){
+	        		var data=getSelected();
+	        		if(data==null)
+	        		{
+	        			alert(selectOne);
+	        		}
+	        		else{
+	        			reAnalysisParams(data);
+	        		}
+	        	})
+	        	
+	        	  $("#paramsList").kendoTooltip({
+	            	   filter: "td:nth-child(12)", 
+	            	   position: "bottom", 
+	            	   content: function(e){
+	            	    var dataItem = $("#paramsList").data("kendoGrid").dataItem(e.target.closest("tr"));
+	            	    var content = dataItem.content;
+	            	    return content;
+	            	   }
+	            	 }).data("kendoTooltip");
+
+	        	
+	        	
+	        	
+	        
+	        
+	        /*----------------------------------------------------------------*/
+	        	//列和参数window
+	            $("#formElementsWin").kendoWindow({
+	            	width: "1200px",
+	            	height:"500px",
+	                title: "Params",
+	                modal: true,
+	                actions: [
+	                    "Pin",
+	                    "Minimize",
+	                    "Maximize",
+	                    "Close"
+	                ],
+	                visible: false
+	            });
+	        
+	        	//渲染参数控件
+	        	$(".k-grid-showFormElementsWin").click(function(){
+	        		var data=getSelected();
+	        		if(data==null)
+	        		{
+	        			alert(selectOne);
+	        		}
+	        		else{
+	        			$("#formElementsWin").data("kendoWindow").center().open();
+	        			showFormElements(data);
+	        		}
+	        	})
+	        	<!--渲染Lov弹出框-->
+	            $("#lovWin").kendoWindow({
+	            	width: "700px",
+	            	height:"300px",
+	            	modal: true,
+	                title: "LOV",
+	                actions: [
+	                    "Pin",
+	                    "Minimize",
+	                    "Maximize",
+	                    "Close"
+	                ],
+	                visible: false
+	            });
+	        
+	        
+	    });
+    </script>
+
+</body>
+</html>

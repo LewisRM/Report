@@ -1,0 +1,244 @@
+<#--
+ * description: 数据源
+ * version: 1.0 
+ * author:qiuzheng.wang@hand-china.com
+ *  
+ * 
+-->
+<#include "../include/header.html">
+<body>
+<div id="content-container">
+        <div id="page-content">       
+            <div id="dataSourceGrid" style="clear:both"></div>
+        </div>
+        <div class="panel-heading">
+            <h3 class="panel-title">示例</h3>
+        </div>
+        <div class="alert">
+            <p class="alert-link">
+                mysql
+                &nbsp;&nbsp; jdbc:mysql://localhost/hap_prod?useUnicode=true&characterEncoding=GB2312</br>
+                oracle
+                &nbsp;&nbsp;jdbc:oracle:thin:@localhost:1521:orcl</br>
+                db2
+                &nbsp;&nbsp;jdbc:db2://localhost:5000/testDB</br>
+                sqlserver
+                &nbsp;&nbsp;jdbc:microsoft:sqlserver://localhost:1433;DatabaseName=testDB</br>
+                sybase
+                &nbsp;&nbsp;jdbc:sybase:Tds:localhost:5007/testDB</br>
+                infoxmix
+                &nbsp;&nbsp;jdbc:infoxmix-sqli://localhost:1533/testDB:INFORMIXSERVER=myserver</br>
+                postgresql
+                &nbsp;&nbsp;jdbc:postgresql://localhost/testDB
+            </p>
+        </div>
+ </div>
+ <script type="text/javascript">
+
+$(document).ready(function () {
+	
+	    var viewModel = kendo.observable({
+	        model:{},
+	        queryResource: function(e) {
+	            $('#dataSourceGrid').data('kendoGrid').dataSource.read();
+	        }
+	    });
+	    kendo.bind($('#page-content'),viewModel)
+	    
+        var BaseUrl = "${base.contextPath}/rep/dataSource/",
+            dataSource = new kendo.data.DataSource({
+                transport: {
+                    read:  {
+                        url: BaseUrl + "query",
+                        type : "POST",
+                        dataType: "json"
+                    },
+                    update: {
+                        url: BaseUrl + "submit",
+                        type : "POST" ,
+                        contentType: "application/json"
+                    },
+                    destroy: {
+                        url: BaseUrl + "delete",
+                        type : "POST" ,
+                        contentType: "application/json"
+                    },
+                    create: {
+                        url: BaseUrl + "submit",
+                        type : "POST" ,
+                        contentType: "application/json"
+                    },
+                    parameterMap: function(options, type) {
+                        if (type !== "read" && options.models) {
+                            var datas = options.models
+                            if(type =='create' || type =='update'){
+                                datas = options.models.map(function(data){
+                                    data['__status'] = (type =='create' ? 'add' : 'update');
+                                    return data;
+                                })
+                            }
+                            return kendo.stringify(datas);
+                        } else if (type === "read") {
+                            var model = viewModel.model;
+                            var map = {langCode: model.langCode,description: model.description}
+                            if (options.page) 
+                                map.page = options.page; 
+                            if (options.pageSize) 
+                                map.pagesize = options.pageSize;
+                            for(var k in map){
+                            	if(map[k]==='')delete map[k]
+                            }
+                            return map;
+                        }  
+                    }
+                },
+                batch: true,
+                serverPaging : true,
+                pageSize: 10,
+                schema: {
+                    data:'rows',
+                    total:'total',
+                    model: {
+                    	id: "dataSourceId",
+                        fields: {
+                        	jdbcUrl: { editable: true, validation: { required: true } },
+                        	name: { editable: true, validation: { required: true } },
+                        	username: { editable: true, validation: { required: true } },
+                        	password:{ editable: true, validation: { required: true } }
+                        }
+                    },
+                    errors: function(res){
+                        if(!res.success && res.message) {
+                            return res.message;
+                        }
+                    }
+                },
+                error: function(e) {
+                    alert(e.errors)
+                }
+            });
+
+        $("#dataSourceGrid").kendoGrid({
+        	dataSource: dataSource,
+            resizable: true,
+            selectable: "multiple",
+            scrollable: false,
+            pageable: {
+                pageSizes:[5, 10, 20, 50],
+                refresh:true,
+                buttonCount:5,
+                messages: {
+                    noRecords: "未找到任何数据",
+                    display: "{0} - {1} 共 {2} 条数据",
+                    empty: "没有数据",
+                    page: "页",
+                    of: "/ {0}",
+                    itemsPerPage: "条每页",
+                    first: "第一页",
+                    previous: "前一页",
+                    next: "下一页",
+                    last: "最后一页",
+                    refresh: "刷新"
+                }
+            },
+            toolbar: [{ 
+                name:"create", 
+                text:'<@spring.message "hap.new"/>'
+            },{
+                name:"save",
+                text:'<@spring.message "hap.save"/>'
+            },{
+                name:"cancel",
+                text:'<@spring.message "hap.cancel"/>'
+       		},{
+                name:"test",
+                text:'<@spring.message "hreport.rep.datasource.test"/>'
+       		}],
+            columns: [
+                { 
+                	field: "name", 
+                	title: '<@spring.message "hreport.rep.datasource.name"/>',
+                	width: 70 
+                }, { 
+                	field: "jdbcUrl", 
+                	title: '<@spring.message "hreport.rep.datasource.url"/>',
+                	width: 200 
+                }, 
+                { 
+                	field: "username", 
+                	title: '<@spring.message "hreport.rep.datasource.user"/>',
+                	width: 70 
+                }, 
+                {
+                	field: "password", 
+                	title: '<@spring.message "hreport.rep.datasource.password"/>',
+                	width: 70 
+                }, 
+                {attributes: {style: "text-align:center"}, command : [
+                    {
+	                    text : '<@spring.message "hap.delete"/>',
+	                    click: function(e){
+	                        e.preventDefault();
+	                        var source = $("#dataSourceGrid").data('kendoGrid').dataSource,
+	                        data = this.dataItem($(e.target).closest("tr"));
+	                        source.remove(data)
+	                        source.sync()
+	                    }
+	                }
+                ],  width : 70} ],
+                editable: true
+        });
+        
+        //测试 
+        $(".k-grid-test").click(function(){
+        	var grid = $("#dataSourceGrid").data("kendoGrid");
+        	var dataRows = grid.items();
+        	// 获取行号
+        	var rowIndex = dataRows.index(grid.select());
+        	// 获取行对象
+        	var data = grid.dataItem(grid.select());
+        	test(data);
+        })
+        
+    });
+    
+
+    //测试数据库连接
+    function test(data)
+    {
+    	if(data==null)
+    	{
+    		alert("请选中一行！");
+    		return;
+    	}
+    	var jdbcUrl=data.jdbcUrl;
+        var username=data.username;
+        var password=data.password;
+        $.ajax({
+              type: "POST",
+              async: false,
+              url:"/core/rep/dataSource/test",
+              dataType:"html",
+              contentType: "application/json",
+              data:JSON.stringify({
+            	  "jdbcUrl":jdbcUrl,
+	        		"username":username,
+	        		"password":password
+              }),
+              success:function(data){
+            	  console.info(data)
+	        	  if(data==1)
+        		  {
+	        	      alert("测试成功")
+        		  }
+	        	  else
+        	      {
+	        		  alert("测试失败")
+        		  }
+              }
+       	});
+    }
+
+</script>
+</body>
+</html>

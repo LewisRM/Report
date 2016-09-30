@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ~ #{copyright}# -->
+
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+                           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+
+    <context:property-placeholder location="classpath:config.properties"/>
+
+
+    <!--<bean id="customUserEntityManager" class="com.hand.hap.activiti.manager.CustomUserEntityManager"/>-->
+    <!--<bean id="customGroupEntityManager" class="com.hand.hap.activiti.manager.CustomGroupEntityManager"/>-->
+
+
+    <bean id="customBehaviorFactory" class="com.hand.hap.activiti.custom.CustomBehaviorFactory"/>
+
+    <bean id="activitiBeanProvider" class="com.hand.hap.activiti.custom.ActivitiBeanProvider"/>
+
+    <bean id="notificationListener" class="com.hand.hap.activiti.listeners.NotificationListener"/>
+
+    <!-- 创建一个流程引擎的配置对象 -->
+    <bean id="processEngineConfiguration" class="org.activiti.spring.SpringProcessEngineConfiguration">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="transactionManager" ref="transactionManager"/>
+        <!-- 设置数据库schema的更新方式 -->
+        <property name="databaseSchemaUpdate" value="true"/>
+
+        <property name="mailServerHost" value="smtp.126.com"/>
+        <property name="mailServerPort" value="25"/>
+        <property name="mailServerUsername" value="hap_dev@126.com"/>
+        <property name="mailServerPassword" value="hapdev11"/>
+
+        <property name="asyncExecutorActivate" value="true"/>
+
+        <property name="dbIdentityUsed" value="false"/>
+
+        <property name="activityBehaviorFactory" ref="customBehaviorFactory"/>
+
+        <property name="groupDataManager" ref="customGroupDataManager"/>
+        <property name="userDataManager" ref="customUserDataManager"/>
+
+        <property name="beans" ref="activitiBeanProvider"/>
+
+        <property name="customDefaultBpmnParseHandlers" >
+
+            <list>
+                <bean class="com.hand.hap.activiti.custom.AddListenerUserTaskParseHandler">
+                    <constructor-arg index="0" value="create"/>
+                    <constructor-arg index="1" ref="notificationListener"/>
+                </bean>
+            </list>
+        </property>
+
+        <!--<property name="customFormTypes">-->
+            <!--<list>-->
+                <!--<bean class="org.activiti.explorer.form.UserFormType"/>-->
+                <!--<bean class="org.activiti.explorer.form.ProcessDefinitionFormType"/>-->
+                <!--<bean class="org.activiti.explorer.form.MonthFormType"/>-->
+            <!--</list>-->
+        <!--</property>-->
+
+        <!--<property name="customSessionFactories">-->
+            <!--<list>-->
+                <!--<bean class="com.hand.hap.activiti.manager.CustomUserEntityManagerFactory">-->
+                    <!--<property name="customUserEntityManager" ref="customUserEntityManager"/>-->
+                <!--</bean>-->
+                <!--<bean class="com.hand.hap.activiti.manager.CustomGroupEntityManagerFactory">-->
+                    <!--<property name="customGroupEntityManager" ref="customGroupEntityManager"/>-->
+                <!--</bean>-->
+            <!--</list>-->
+        <!--</property>-->
+        <!--<property name="postBpmnParseHandlers">-->
+            <!--<list>-->
+                <!--<bean class="com.hand.hap.activiti.handlers.MyBpmnParseHandler"/>-->
+            <!--</list>-->
+        <!--</property>-->
+
+        <!--<property name="customPreCommandInterceptors">-->
+            <!--<list>-->
+                <!--<bean class="com.hand.hap.activiti.interceptors.MyCommandInterceptor"/>-->
+            <!--</list>-->
+        <!--</property>-->
+
+    </bean>
+    <bean id="customGroupDataManager" lazy-init="true" class="com.hand.hap.activiti.manager.CustomGroupDataManager">
+        <constructor-arg ref="processEngineConfiguration"/>
+    </bean>
+
+    <bean id="customUserDataManager" lazy-init="true" class="com.hand.hap.activiti.manager.CustomUserDataManager">
+        <constructor-arg ref="processEngineConfiguration"/>
+    </bean>
+
+    <!-- 创建一个流程引擎bean -->
+    <bean id="processEngine" class="org.activiti.spring.ProcessEngineFactoryBean">
+        <property name="processEngineConfiguration" ref="processEngineConfiguration"/>
+    </bean>
+    <!-- 创建activiti提供的各种服务 -->
+    <!-- 工作流仓储服务 -->
+    <bean id="repositoryService" factory-bean="processEngine" factory-method="getRepositoryService"/>
+    <!-- 工作流运行服务 -->
+    <bean id="runtimeService" factory-bean="processEngine" factory-method="getRuntimeService"/>
+    <!--  工作流任务服务-->
+    <bean id="taskService" factory-bean="processEngine" factory-method="getTaskService"/>
+    <!--  工作流历史数据服务-->
+    <bean id="historyService" factory-bean="processEngine" factory-method="getHistoryService"/>
+    <!--  工作流管理服务-->
+    <bean id="managementService" factory-bean="processEngine" factory-method="getManagementService"/>
+    <!-- 工作流user服务 -->
+    <bean id="identityService" factory-bean="processEngine" factory-method="getIdentityService"/>
+
+    <bean id="formService" factory-bean="processEngine" factory-method="getFormService"/>
+
+
+    <bean id="restResponseFactory" class="com.hand.hap.activiti.custom.CustomRestResponseFactory">
+    </bean>
+
+    <bean class="org.activiti.rest.common.application.DefaultContentTypeResolver"/>
+
+</beans>

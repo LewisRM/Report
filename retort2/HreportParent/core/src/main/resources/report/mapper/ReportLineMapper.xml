@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hreport.core.report.mapper.ReportLineMapper">
+
+
+	<resultMap type="hreport.core.report.dto.ReportLine" id="reportLineMap">
+		<id property="repLineId" column="rep_line_id" />
+		<result property="headerId" column="rep_header_id" />
+		<result property="columnName" column="column_name" />
+		<result property="name" column="name" />
+		<result property="type" column="type" />
+		<result property="dataType" column="data_type" />
+		<result property="columnWidth" column="column_width" />
+		<result property="displayWidth" column="display_width" />
+		<result property="format" column="format" />
+		<result property="sort" column="sort" />
+		<result property="display" column="display" />
+	</resultMap>
+
+
+	<select id="getLinesByHeaderId" parameterType="Long" resultMap="reportLineMap">
+		select *  from rep_report_line_b where rep_header_id=#{headerId}
+	</select>
+	
+</mapper>

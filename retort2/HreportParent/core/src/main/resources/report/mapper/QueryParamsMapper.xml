@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hreport.core.report.mapper.QueryParamsMapper">
+
+	<resultMap type="hreport.core.report.dto.QueryParams" id="queryParamsMap">
+		<id property="queryParamsId" column="query_params_id" />
+		<result property="headerId" column="rep_header_id" />
+		<result property="paramsName" column="params_name" />
+		<result property="name" column="name" />
+		<result property="text" column="text" />
+		<result property="defaultType" column="default_type" />
+		<result property="defaultValue" column="default_value" />
+		<result property="defaultText" column="default_text" />
+		<result property="dataType" column="data_type" />
+		<result property="width" column="width" />
+		<result property="showWidth" column="show_width" />
+		<result property="formElement" column="form_element" />
+		<result property="contentSource" column="content_source" />
+		<result property="content" column="content" />
+		<result property="required" column="required" />
+		<result property="display" column="display" />
+	</resultMap>
+
+	<select id='getParamsByHeaderId' parameterType="Long" resultMap="queryParamsMap">
+		select * from rep_query_params_b where rep_header_id=#{headerId}
+	</select>
+
+
+
+</mapper>

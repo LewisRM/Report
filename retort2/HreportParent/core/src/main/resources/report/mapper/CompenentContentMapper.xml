@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hreport.core.report.mapper.CompenentContentMapper">
+
+	<resultMap type="hreport.core.report.dto.CompenentContent" id="compenentContentMap">
+		<id property="mapperId" column="mapper_id" />
+		<result property="compenent" column="compenent" />
+		<result property="content" column="content" />
+	</resultMap>
+
+	<select id="getByCompentent" resultMap="compenentContentMap">
+		select * from rep_compenent_content where compenent=#{compenent}
+	</select>
+</mapper>

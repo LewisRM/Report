@@ -1,0 +1,102 @@
+﻿
+INSERT INTO `sys_resource_b` VALUES ('279', 'report/datasource.html', 'HTML', '数据源', '数据源', 'N', 'N', '2', '-1', '-1', '2016-09-02 14:39:15', '3', '3', '2016-09-02 14:43:22', '3', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `sys_resource_b` VALUES ('281', 'report/list.html', 'HTML', '列表', '报表信息', 'N', 'N', '2', '-1', '-1', '2016-09-09 17:01:20', '3', '3', '2016-09-28 09:35:39', '3', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `sys_resource_b` VALUES ('282', 'report/report.html?id=28', 'HTML', '报表', '报表', 'Y', 'N', '2', '-1', '-1', '2016-09-17 21:48:00', '3', '3', '2016-09-18 13:47:48', '3', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `sys_resource_b` VALUES ('285', 'report/report.html?id=29', 'HTML', '员工报表3', '员工报表3', 'N', 'N', '1', '-1', '-1', '2016-09-20 11:05:54', '3', '3', '2016-09-20 11:05:54', '3', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `sys_resource_b` VALUES ('286', 'lov/lov.html', 'HTML', 'LOV', 'LOV', 'N', 'N', '1', '-1', '-1', '2016-09-21 17:00:23', '3', '3', '2016-09-21 17:00:23', '3', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+
+
+
+INSERT INTO `sys_resource_tl` VALUES ('279', 'en_GB', '数据源', '数据源', '1', '-1', '-1', '2016-09-02 14:39:15', '3', '3', '2016-09-02 14:39:15', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `sys_resource_tl` VALUES ('279', 'zh_CN', '数据源', '数据源', '1', '-1', '-1', '2016-09-02 14:39:15', '3', '3', '2016-09-02 14:43:22', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `sys_resource_tl` VALUES ('281', '111', '列表', '列表', '1', '-1', '-1', '2016-09-09 17:01:19', '3', '3', '2016-09-09 17:01:19', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `sys_resource_tl` VALUES ('281', '222', '列表', '列表', '1', '-1', '-1', '2016-09-09 17:01:19', '3', '3', '2016-09-09 17:01:19', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `sys_resource_tl` VALUES ('281', 'en_GB', '列表', '列表', '1', '-1', '-1', '2016-09-09 17:01:19', '3', '3', '2016-09-09 17:01:19', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `sys_resource_tl` VALUES ('281', 'zh_CN', '列表', '报表信息', '1', '-1', '-1', '2016-09-09 17:01:19', '3', '3', '2016-09-28 09:35:39', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `sys_resource_tl` VALUES ('282', '111', '报表', '报表', '1', '-1', '-1', '2016-09-17 21:47:59', '3', '3', '2016-09-17 21:47:59', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `sys_resource_tl` VALUES ('282', '222', '报表', '报表', '1', '-1', '-1', '2016-09-17 21:47:59', '3', '3', '2016-09-17 21:47:59', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `sys_resource_tl` VALUES ('282', 'en_GB', '报表', '报表', '1', '-1', '-1', '2016-09-17 21:47:59', '3', '3', '2016-09-17 21:47:59', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `sys_resource_tl` VALUES ('282', 'zh_CN', '报表', '报表', '1', '-1', '-1', '2016-09-17 21:47:59', '3', '3', '2016-09-18 13:47:48', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `sys_resource_tl` VALUES ('284', '111', '员工报表3', '员工报表3', '1', '-1', '-1', '2016-09-20 10:57:35', '3', '3', '2016-09-20 10:57:35', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `sys_resource_tl` VALUES ('284', '222', '员工报表3', '员工报表3', '1', '-1', '-1', '2016-09-20 10:57:35', '3', '3', '2016-09-20 10:57:35', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `sys_resource_tl` VALUES ('284', 'en_GB', '员工报表3', '员工报表3', '1', '-1', '-1', '2016-09-20 10:57:35', '3', '3', '2016-09-20 10:57:35', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `sys_resource_tl` VALUES ('284', 'zh_CN', '员工报表3', '员工报表3', '1', '-1', '-1', '2016-09-20 10:57:35', '3', '3', '2016-09-20 10:57:35', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `sys_resource_tl` VALUES ('285', '111', '员工报表3', '员工报表3', '1', '-1', '-1', '2016-09-20 11:05:54', '3', '3', '2016-09-20 11:05:54', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `sys_resource_tl` VALUES ('285', '222', '员工报表3', '员工报表3', '1', '-1', '-1', '2016-09-20 11:05:54', '3', '3', '2016-09-20 11:05:54', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `sys_resource_tl` VALUES ('285', 'en_GB', '员工报表3', '员工报表3', '1', '-1', '-1', '2016-09-20 11:05:54', '3', '3', '2016-09-20 11:05:54', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `sys_resource_tl` VALUES ('285', 'zh_CN', '员工报表3', '员工报表3', '1', '-1', '-1', '2016-09-20 11:05:54', '3', '3', '2016-09-20 11:05:54', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `sys_resource_tl` VALUES ('286', '111', 'LOV', 'LOV', '1', '-1', '-1', '2016-09-21 17:00:22', '3', '3', '2016-09-21 17:00:22', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `sys_resource_tl` VALUES ('286', '222', 'LOV', 'LOV', '1', '-1', '-1', '2016-09-21 17:00:22', '3', '3', '2016-09-21 17:00:22', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `sys_resource_tl` VALUES ('286', 'en_GB', 'LOV', 'LOV', '1', '-1', '-1', '2016-09-21 17:00:22', '3', '3', '2016-09-21 17:00:22', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `sys_resource_tl` VALUES ('286', 'zh_CN', 'LOV', 'LOV', '1', '-1', '-1', '2016-09-21 17:00:22', '3', '3', '2016-09-21 17:00:22', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+
+
+
+INSERT INTO `sys_function_b` VALUES ('170', 'ReportList', 'icon-envelope', 'ReportList', 'ReportList', 'ReportList', '281', 'PAGE', '178', null, '1', '3', '-1', '-1', '2016-09-12 09:25:29', '3', '3', '2016-09-18 14:34:56', '3', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `sys_function_b` VALUES ('171', 'report', 'icon-envelope', 'reportInformation', '报表信息', '报表信息', '281', 'PAGE', '178', null, '1', '4', '-1', '-1', '2016-09-12 09:30:14', '3', '3', '2016-09-28 09:30:36', '3', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `sys_function_b` VALUES ('172', 'dataSource', 'icon-envelope', 'dataSource', '数据源', '数据源', '279', 'PAGE', '178', null, '2', '3', '-1', '-1', '2016-09-17 15:51:17', '3', '3', '2016-09-28 09:31:09', '3', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `sys_function_b` VALUES ('176', 'userReport', 'icon-envelope', 'userReport', '员工报表', 'userReport', '282', 'PAGE', '177', null, '2', '6', '-1', '-1', '2016-09-17 21:51:02', '3', '3', '2016-09-20 10:28:17', '3', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `sys_function_b` VALUES ('177', 'report', 'icon-envelope', 'reportList', '报表列表', 'reportList', null, 'PAGE', '184', null, '1', '3', '-1', '-1', '2016-09-18 14:30:59', '3', '3', '2016-09-28 09:31:31', '3', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `sys_function_b` VALUES ('178', 'report', 'icon-envelope', 'reportSet', '报表设置', 'reportSet', null, 'PAGE', '184', null, '1', '4', '-1', '-1', '2016-09-18 14:34:23', '3', '3', '2016-09-28 09:31:31', '3', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `sys_function_b` VALUES ('181', 'report', 'icon-envelope', 'employeeReport', '员工报表3', '员工报表3', '285', 'PAGE', '177', null, '70', '1', '-1', '-1', '2016-09-20 11:05:54', '3', '3', '2016-09-20 11:05:54', '3', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `sys_function_b` VALUES ('182', 'report', 'icon-envelope', 'lov', 'lov', 'lov', '286', 'PAGE', '178', null, '2', '1', '-1', '-1', '2016-09-21 17:01:19', '3', '3', '2016-09-21 17:01:19', '3', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `sys_function_b` VALUES ('184', 'report', 'icon-envelope', 'report', '报表', '报表', null, 'PAGE', null, null, '0', '2', '-1', '-1', '2016-09-28 09:28:43', '3', '3', '2016-09-28 09:30:11', '3', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+
+
+
+INSERT INTO `sys_function_tl` VALUES ('170', '111', 'ReportList', 'ReportList', '1', '-1', '-1', '2016-09-12 09:25:28', '3', '3', '2016-09-12 09:25:28', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `sys_function_tl` VALUES ('170', '222', 'ReportList', 'ReportList', '1', '-1', '-1', '2016-09-12 09:25:28', '3', '3', '2016-09-12 09:25:28', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `sys_function_tl` VALUES ('170', 'en_GB', 'ReportList', 'ReportList', '1', '-1', '-1', '2016-09-12 09:25:28', '3', '3', '2016-09-12 09:25:28', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `sys_function_tl` VALUES ('170', 'zh_CN', 'ReportList', 'ReportList', '1', '-1', '-1', '2016-09-12 09:25:28', '3', '3', '2016-09-18 14:34:56', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `sys_function_tl` VALUES ('171', '111', null, null, '1', '-1', '-1', '2016-09-12 09:30:14', '3', '3', '2016-09-28 09:30:36', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `sys_function_tl` VALUES ('171', '222', null, null, '1', '-1', '-1', '2016-09-12 09:30:14', '3', '3', '2016-09-28 09:30:36', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `sys_function_tl` VALUES ('171', 'en_GB', 'report information', 'report information', '1', '-1', '-1', '2016-09-12 09:30:14', '3', '3', '2016-09-28 09:30:36', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `sys_function_tl` VALUES ('171', 'zh_CN', '报表信息', '报表信息', '1', '-1', '-1', '2016-09-12 09:30:14', '3', '3', '2016-09-28 09:30:36', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `sys_function_tl` VALUES ('172', '111', null, null, '1', '-1', '-1', '2016-09-17 15:51:17', '3', '3', '2016-09-28 09:31:09', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `sys_function_tl` VALUES ('172', '222', null, null, '1', '-1', '-1', '2016-09-17 15:51:17', '3', '3', '2016-09-28 09:31:09', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `sys_function_tl` VALUES ('172', 'en_GB', 'dataSource', 'dataSource', '1', '-1', '-1', '2016-09-17 15:51:17', '3', '3', '2016-09-28 09:31:09', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `sys_function_tl` VALUES ('172', 'zh_CN', '数据源', '数据源', '1', '-1', '-1', '2016-09-17 15:51:17', '3', '3', '2016-09-28 09:31:09', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `sys_function_tl` VALUES ('176', '111', 'cwReport', 'cwReport', '1', '-1', '-1', '2016-09-17 21:51:02', '3', '3', '2016-09-17 21:51:02', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `sys_function_tl` VALUES ('176', '222', 'cwReport', 'cwReport', '1', '-1', '-1', '2016-09-17 21:51:02', '3', '3', '2016-09-17 21:51:02', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `sys_function_tl` VALUES ('176', 'en_GB', 'cwReport', 'cwReport', '1', '-1', '-1', '2016-09-17 21:51:02', '3', '3', '2016-09-17 21:51:02', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `sys_function_tl` VALUES ('176', 'zh_CN', '员工报表', 'userReport', '1', '-1', '-1', '2016-09-17 21:51:02', '3', '3', '2016-09-20 10:28:17', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `sys_function_tl` VALUES ('177', '111', '报表列表', 'reportList', '1', '-1', '-1', '2016-09-18 14:30:58', '3', '3', '2016-09-18 14:30:58', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `sys_function_tl` VALUES ('177', '222', '报表列表', 'reportList', '1', '-1', '-1', '2016-09-18 14:30:58', '3', '3', '2016-09-18 14:30:58', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `sys_function_tl` VALUES ('177', 'en_GB', '报表列表', 'reportList', '1', '-1', '-1', '2016-09-18 14:30:58', '3', '3', '2016-09-18 14:30:58', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `sys_function_tl` VALUES ('177', 'zh_CN', '报表列表', 'reportList', '1', '-1', '-1', '2016-09-18 14:30:58', '3', '3', '2016-09-28 09:31:31', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `sys_function_tl` VALUES ('178', '111', null, 'reportSet', '1', '-1', '-1', '2016-09-18 14:34:23', '3', '3', '2016-09-28 09:28:42', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `sys_function_tl` VALUES ('178', '222', null, 'reportSet', '1', '-1', '-1', '2016-09-18 14:34:23', '3', '3', '2016-09-28 09:28:42', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `sys_function_tl` VALUES ('178', 'en_GB', 'report set', 'reportSet', '1', '-1', '-1', '2016-09-18 14:34:23', '3', '3', '2016-09-28 09:28:42', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `sys_function_tl` VALUES ('178', 'zh_CN', '报表设置', 'reportSet', '1', '-1', '-1', '2016-09-18 14:34:23', '3', '3', '2016-09-28 09:31:31', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `sys_function_tl` VALUES ('180', '111', '员工报表3', '员工报表3', '1', '-1', '-1', '2016-09-20 10:57:35', '3', '3', '2016-09-20 10:57:35', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `sys_function_tl` VALUES ('180', '222', '员工报表3', '员工报表3', '1', '-1', '-1', '2016-09-20 10:57:35', '3', '3', '2016-09-20 10:57:35', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `sys_function_tl` VALUES ('180', 'en_GB', '员工报表3', '员工报表3', '1', '-1', '-1', '2016-09-20 10:57:35', '3', '3', '2016-09-20 10:57:35', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `sys_function_tl` VALUES ('180', 'zh_CN', '员工报表3', '员工报表3', '1', '-1', '-1', '2016-09-20 10:57:35', '3', '3', '2016-09-20 10:57:35', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `sys_function_tl` VALUES ('181', '111', '员工报表3', '员工报表3', '1', '-1', '-1', '2016-09-20 11:05:54', '3', '3', '2016-09-20 11:05:54', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `sys_function_tl` VALUES ('181', '222', '员工报表3', '员工报表3', '1', '-1', '-1', '2016-09-20 11:05:54', '3', '3', '2016-09-20 11:05:54', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `sys_function_tl` VALUES ('181', 'en_GB', '员工报表3', '员工报表3', '1', '-1', '-1', '2016-09-20 11:05:54', '3', '3', '2016-09-20 11:05:54', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `sys_function_tl` VALUES ('181', 'zh_CN', '员工报表3', '员工报表3', '1', '-1', '-1', '2016-09-20 11:05:54', '3', '3', '2016-09-20 11:05:54', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `sys_function_tl` VALUES ('182', '111', 'lov', 'lov', '1', '-1', '-1', '2016-09-21 17:01:18', '3', '3', '2016-09-21 17:01:18', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `sys_function_tl` VALUES ('182', '222', 'lov', 'lov', '1', '-1', '-1', '2016-09-21 17:01:18', '3', '3', '2016-09-21 17:01:18', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `sys_function_tl` VALUES ('182', 'en_GB', 'lov', 'lov', '1', '-1', '-1', '2016-09-21 17:01:18', '3', '3', '2016-09-21 17:01:18', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `sys_function_tl` VALUES ('182', 'zh_CN', 'lov', 'lov', '1', '-1', '-1', '2016-09-21 17:01:18', '3', '3', '2016-09-21 17:01:18', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `sys_function_tl` VALUES ('184', '111', '111', '111', '1', '-1', '-1', '2016-09-28 09:28:42', '3', '3', '2016-09-28 09:28:42', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `sys_function_tl` VALUES ('184', '222', '222', '222', '1', '-1', '-1', '2016-09-28 09:28:42', '3', '3', '2016-09-28 09:28:42', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `sys_function_tl` VALUES ('184', 'en_GB', 'report', 'report', '1', '-1', '-1', '2016-09-28 09:28:42', '3', '3', '2016-09-28 09:28:42', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `sys_function_tl` VALUES ('184', 'zh_CN', '报表', '报表', '1', '-1', '-1', '2016-09-28 09:28:42', '3', '3', '2016-09-28 09:30:11', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+
+
+
+INSERT INTO `rep_compenent_content` VALUES ('1', 'SINGLE_SELECT', 'SQL');
+INSERT INTO `rep_compenent_content` VALUES ('2', 'SINGLE_SELECT', 'STRING');
+INSERT INTO `rep_compenent_content` VALUES ('3', 'MULTI_SELECT', 'SQL');
+INSERT INTO `rep_compenent_content` VALUES ('4', 'MULTI_SELECT', 'STRING');
+INSERT INTO `rep_compenent_content` VALUES ('5', 'COMBOBOX', 'SQL');
+INSERT INTO `rep_compenent_content` VALUES ('6', 'COMBOBOX', 'STRING');
+INSERT INTO `rep_compenent_content` VALUES ('7', 'CHECKBOX', 'SQL');
+INSERT INTO `rep_compenent_content` VALUES ('8', 'CHECKBOX', 'STRING');
+INSERT INTO `rep_compenent_content` VALUES ('9', 'DATE', 'NULL');
+INSERT INTO `rep_compenent_content` VALUES ('10', 'TIME', 'NULL');
+INSERT INTO `rep_compenent_content` VALUES ('11', 'INPUT', 'NULL');
+INSERT INTO `rep_compenent_content` VALUES ('12', 'LOV', 'LOV');
+INSERT INTO `rep_compenent_content` VALUES ('13', 'LOV', 'VALUE_SET');
